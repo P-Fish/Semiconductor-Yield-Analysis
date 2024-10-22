@@ -1,5 +1,3 @@
-import os
-
 import wf_dataprocessing
 
 if __name__ == '__main__':

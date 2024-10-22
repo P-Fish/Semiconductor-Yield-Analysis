@@ -64,6 +64,7 @@ def mung_data():
 
     final_df =  simulate_nan_values(combined_df)
 
+    os.makedirs(os.path.dirname(output), exist_ok=True)
     with open(output, 'wb') as output_file:
         try:
             pickle.dump(final_df, output_file)
