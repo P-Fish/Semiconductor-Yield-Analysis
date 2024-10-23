@@ -39,7 +39,13 @@ def mung_data():
     path_sep = os.path.sep
     labels = 'data_original' + path_sep + 'secom_labels.data'
     features = 'data_original' + path_sep + 'secom.data'
-    output = 'data_processed' + path_sep + 'secom_output.pickle'
+    output = (
+            'data_processed'
+            + path_sep
+            + 'serialized'
+            + path_sep
+            + 'secom_output.pickle'
+    )
 
     labels_df = pd.read_csv(labels,
                             sep=' ',
