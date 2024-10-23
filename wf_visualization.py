@@ -92,7 +92,6 @@ def visualize_data():
         q_df = data[[col for col in data.columns if col.startswith('feature_')][:4]]
         matrix = q_df.corr()
         half = matrix.where(np.tril(np.ones(matrix.shape)).astype(bool), '')
-        print(half)
         with open(output, 'wb') as output_file:
             try:
                 output_file.write(str(half).encode('utf-8'))
@@ -157,7 +156,6 @@ def visualize_data():
     data_f = None
     with open(pickled_data, 'rb') as f:
         try:
-            print('Loading data from pickle file...')
             data_f = pd.DataFrame(pickle.load(f))
         except Exception as err:
             print(err)
