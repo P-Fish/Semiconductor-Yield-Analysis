@@ -1,7 +1,8 @@
+import os
+import pickle
+
 import numpy as np
 import pandas as pd
-import pickle
-import os
 
 __author__ = 'Fischbach'
 __date__ = '10/22/24'
@@ -9,7 +10,6 @@ __assignment = 'MS 3: Data Munging and Visualization'
 
 
 def mung_data():
-
     def simulate_nan_values(df):
         result_df = df.copy()
         feature_cols = [col for col in df.columns if col.startswith('feature_')]
@@ -34,7 +34,6 @@ def mung_data():
                         result_df.loc[mask & df[col].isna(), col] = random_values
 
         return result_df
-
 
     path_sep = os.path.sep
     labels = 'data_original' + path_sep + 'secom_labels.data'
@@ -66,9 +65,9 @@ def mung_data():
     labels_df = labels_df.reset_index(drop=True)
     features_df = features_df.reset_index(drop=True)
 
-    combined_df = pd.concat([labels_df, features_df], axis=1, ignore_index=False)
+    combined_df = pd.concat([labels_df['pass'], features_df], axis=1, ignore_index=False)
 
-    final_df =  simulate_nan_values(combined_df)
+    final_df = simulate_nan_values(combined_df)
 
     os.makedirs(os.path.dirname(output), exist_ok=True)
     with open(output, 'wb') as output_file:

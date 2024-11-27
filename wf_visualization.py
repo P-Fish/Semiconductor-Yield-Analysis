@@ -1,11 +1,11 @@
 import os
+import pickle
 from dbm import error
 from itertools import combinations
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pickle
 
 
 def visualize_data():
@@ -153,17 +153,15 @@ def visualize_data():
             + path_sep
     )
 
-    data_f = None
     with open(pickled_data, 'rb') as f:
         try:
             data_f = pd.DataFrame(pickle.load(f))
+            find_summary_stats(data_f)
+            find_pairwise_correlations(data_f)
+            plot_data(data_f)
         except Exception as err:
             print(err)
             pass
-
-    find_summary_stats(data_f)
-    find_pairwise_correlations(data_f)
-    plot_data(data_f)
 
 
 if __name__ == '__main__':
