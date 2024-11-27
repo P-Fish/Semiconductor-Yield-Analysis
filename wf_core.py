@@ -10,4 +10,4 @@ if __name__ == '__main__':
 
     mung_data()
     visualize_data()
-    evaluate_data()
+    evaluate_data(True)

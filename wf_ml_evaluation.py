@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+from wf_ml_evaluation_experimentation import conduct_feature_experiments
 from wf_ml_prediction import evaluate_models
 from wf_ml_training import train_classification_models
 
@@ -156,7 +157,7 @@ def load_split_data(base_path="data_processed"):
         raise IOError(f"Error loading split data: {str(e)}")
 
 
-def evaluate_data():
+def evaluate_data(run_experiment=False):
     path_sep = os.path.sep
     pickled_data = (
             'data_processed'
@@ -174,6 +175,15 @@ def evaluate_data():
             split_data = load_split_data()
             train_classification_models(split_data['X_train'], split_data['y_train'])
             evaluate_models(split_data['X_test'], split_data['y_test'])
+            if run_experiment:
+                model_path = Path("models/gradient_boosting.pkl")
+                with open(model_path, 'rb') as f_exp:
+                    scaler_path = Path("data_processed/scaler.pkl")
+                    with open(scaler_path, 'rb') as f_scl:
+                        model = pickle.load(f_exp)
+                        scaler = pickle.load(f_scl)
+                        conduct_feature_experiments(model, split_data['X_test'], scaler)
+
         except Exception as err:
             print(err)
             pass
