@@ -27,7 +27,7 @@ def get_feature_importance(model, feature_names):
 
 def train_classification_models(X_train, y_train, base_path="models"):
     """
-    Train multiple classification models with fixed CPU settings.
+    Train multiple classification models with parallel processing completely disabled.
     """
     n_samples = len(y_train)
     n_passed = sum(y_train == -1)
@@ -43,7 +43,7 @@ def train_classification_models(X_train, y_train, base_path="models"):
     model_dir = Path(base_path)
     model_dir.mkdir(parents=True, exist_ok=True)
 
-    # Models with explicit thread settings
+    # Models with ALL parallel processing disabled
     models = {
         'gradient_boosting': GradientBoostingClassifier(
             n_estimators=300,
@@ -51,12 +51,14 @@ def train_classification_models(X_train, y_train, base_path="models"):
             max_depth=4,
             min_samples_leaf=10,
             subsample=0.8,
+            # GradientBoosting doesn't use parallel processing by default
         ),
         'logistic_regression': LogisticRegression(
             max_iter=2000,
             class_weight=class_weight,
             C=0.1,
-            n_jobs=1  # Fixed single thread
+            n_jobs=None,  # Changed from 1 to None to disable parallel processing
+            solver='liblinear'  # Using liblinear solver which doesn't use joblib
         ),
         'random_forest': RandomForestClassifier(
             n_estimators=200,
@@ -64,13 +66,15 @@ def train_classification_models(X_train, y_train, base_path="models"):
             min_samples_leaf=10,
             max_features='sqrt',
             class_weight=class_weight,
-            n_jobs=1  # Fixed single thread
+            n_jobs=None,  # Changed from 1 to None to disable parallel processing
+            bootstrap=True
         ),
         'knn': KNeighborsClassifier(
             n_neighbors=min(int(np.sqrt(len(X_train))), 20),
             weights='distance',
             metric='manhattan',
-            n_jobs=1  # Fixed single thread
+            n_jobs=None,  # Changed from 1 to None to disable parallel processing
+            algorithm='auto'
         )
     }
 
